@@ -1,0 +1,12 @@
+body {
+	background-image: url(https://image.freepik.com/free-photo/hand-painted-watercolor-background-with-sky-clouds-shape_24972-1095.jpg);
+	background-size: cover;
+	text-align: center;
+	text-shadow: 0 .05rem .1rem rgba(0,0,0,.5);
+	color: rgb(66,69,86);
+	height: 100%;
+	font-weight: 100;
+
+}
+
+

@@ -1,0 +1,68 @@
+var express = require('express');
+var mysql = require('mysql');
+var bodyParser  = require("body-parser");
+var app = express();
+
+app.set("view engine","ejs");
+
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(express.static(__dirname + "/public"));
+
+var connection = mysql.createConnection({
+	host:'localhost',
+	user:'root',
+	database:'publicapp'
+});
+
+console.log("connected to database...");
+
+app.get("/", function(err, res){
+	connection.query('SELECT COUNT(*) AS total FROM users', function(err, results){
+		if(err) throw err;
+		var k = results[0].total;
+		res.render("home",{data: k });
+	});
+	
+});
+
+app.post("/step1",function(req, res){
+	var user ={
+		email : req.body.email,
+		name : req.body.name
+	};
+	connection.query('INSERT INTO users SET?',user,function(error, results){
+		if(error) throw error;
+		console.log(results);
+		
+	});
+	res.redirect('/home1');
+	
+});
+
+app.get('/home1', function(req, res){
+	res.render('home1')
+})
+
+app.post("/step2",function(req, res){
+	var data ={
+		movie_name : req.body.movie,
+		song_name : req.body.song,
+		comments: req.body.comment
+	};
+	console.log(data)
+	connection.query('INSERT INTO survey SET?',data,function(error, results){
+		console.log(results);
+		res.redirect('finish');
+		
+	});
+
+});
+
+app.get('/finish', function(req, res){
+	res.render('finish');
+});
+
+app.listen(3000, function(){
+	console.log("App listening from the port 3000!");
+});
